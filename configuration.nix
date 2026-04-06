@@ -217,7 +217,8 @@
     wl-clipboard
     powertop
     usbutils
-
+    btop
+    stow
   ];
 
   programs.neovim = {
@@ -239,20 +240,31 @@
     };
   };
 
+  # Fonts - add Jetbrains Mono
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+  ];
+
+  fonts.fontconfig.defaultFonts = {
+    monospace = [
+      "JetBrainsMono Nerd Font"
+    ];
+  };
+
   # Enable tailscale and firewall
   services.tailscale.enable = true;
   services.tailscale.useRoutingFeatures = "client";
   networking.nftables.enable = true;
   networking.firewall = {
     enable = true;
-    trustedInterfaces = [ "tailscale0" ];
-    allowedUDPPorts = [ config.services.tailscale.port ];
+    trustedInterfaces = ["tailscale0"];
+    allowedUDPPorts = [config.services.tailscale.port];
     checkReversePath = "loose";
   };
 
   systemd.services.tailscaled.serviceConfig.Environment = [
-   "TS_DEBUG_FIREWALL=nftables"
-   ];
+    "TS_DEBUG_FIREWALL=nftables"
+  ];
 
   systemd.network.wait-online.enable = false;
   boot.initrd.systemd.network.wait-online.enable = false;
@@ -267,28 +279,27 @@
   # Enable flakes
   nix.settings.experimental-features = "nix-command flakes";
 
-
   # Enable stylix
   stylix.enable = true;
-  #stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
-  stylix.base16Scheme = {
-    base00 = "#1e1c31"; # background
-    base01 = "#565575"; # alternate background
-    base02 = "#cbe3e7"; 
-    base03 = "#100e23"; # unfocused window border
-    base04 = "#cbe3e7"; 
-    base05 = "#cbe3e7"; # text
-    base06 = "#cbe3e7"; 
-    base07 = "#cbe3e7"; 
-    base08 = "#ff5458"; # urgent window border
-    base09 = "#62d196"; 
-    base0A = "#ffb378"; # warning
-    base0B = "#65b2ff"; 
-    base0C = "#906cff"; 
-    base0D = "#63f2f1"; # focused window border
-    base0E = "#c991e1"; 
-    base0F = "#ffe9aa"; 
-  };
+  stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
+  #stylix.base16Scheme = {
+  #  base00 = "#1e1c31"; # background
+  #  base01 = "#565575"; # alternate background
+  #  base02 = "#cbe3e7";
+  #  base03 = "#100e23"; # unfocused window border
+  #  base04 = "#cbe3e7";
+  #  base05 = "#cbe3e7"; # text
+  #  base06 = "#cbe3e7";
+  #  base07 = "#cbe3e7";
+  #  base08 = "#ff5458"; # urgent window border
+  #  base09 = "#62d196";
+  #  base0A = "#ffb378"; # warning
+  #  base0B = "#65b2ff";
+  #  base0C = "#906cff";
+  #  base0D = "#63f2f1"; # focused window border
+  #  base0E = "#c991e1";
+  #  base0F = "#ffe9aa";
+  #};
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

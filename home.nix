@@ -12,6 +12,15 @@ in {
   home.username = "sethb";
   home.homeDirectory = "/home/sethb";
 
+  # This value determines the Home Manager release that your configuration is
+  # compatible with. This helps avoid breakage when a new Home Manager release
+  # introduces backwards incompatible changes.
+  #
+  # You should not change this value, even if you update Home Manager. If you do
+  # want to update the value, then make sure to first check the Home Manager
+  # release notes.
+  home.stateVersion = "25.11"; # Please read the comment before changing.
+
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = [
@@ -47,6 +56,10 @@ in {
   programs.firefox = {
     enable = true;
 
+    profiles = {
+      sethb = {};
+    };
+
     policies = {
       DisablePocket = true;
       DisableTelemetry = true;
@@ -65,7 +78,10 @@ in {
 
   programs.kitty = lib.mkForce {
     enable = true;
-    extraConfig = "include ~/.config/kitty/challenger-deep.conf";
+
+    # NOTE: use stylix instead for now
+    #extraConfig = "include ~/.config/kitty/challenger-deep.conf";
+
     settings = {
       font_size = "12.0";
       enable_audio_bell = false;
@@ -74,8 +90,15 @@ in {
 
   # TODO configure this
   programs.ranger = {
-      enable = true;
+    enable = true;
   };
+
+  # Stylix stuff
+  stylix.targets.firefox.profileNames = ["sethb"];
+  stylix.targets.neovim.enable = false; # disable stylix for neovim
+
+  # NOTE: need this to fix overwriting the GTK2 config
+  gtk.gtk2.configLocation = "${config.home.homeDirectory}/.config/.gtkrc-2.0";
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -85,14 +108,11 @@ in {
     # # symlink to the Nix store copy.
     # ".screenrc".source = dotfiles/screenrc;
 
-    # Add my kitty color scheme
-    ".config/kitty/challenger-deep.conf".source = config.lib.file.mkOutOfStoreSymlink /home/sethb/dotfiles/kitty/.config/kitty/challenger-deep.conf;
-
     # Add my nvim config
-    ".config/nvim/init.lua".source = config.lib.file.mkOutOfStoreSymlink /home/sethb/dotfiles/neovim/.config/nvim/init.lua;
-    ".config/nvim/filetype.lua".source = config.lib.file.mkOutOfStoreSymlink /home/sethb/dotfiles/neovim/.config/nvim/filetype.lua;
-    ".config/nvim/lazy-lock.json".source = config.lib.file.mkOutOfStoreSymlink /home/sethb/dotfiles/neovim/.config/nvim/lazy-lock.json;
-    ".config/nvim/lua/seth".source = config.lib.file.mkOutOfStoreSymlink /home/sethb/dotfiles/neovim/.config/nvim/lua/seth;
+    #".config/nvim/init.lua".source = config.lib.file.mkOutOfStoreSymlink /home/sethb/dotfiles/neovim/.config/nvim/init.lua;
+    #".config/nvim/filetype.lua".source = config.lib.file.mkOutOfStoreSymlink /home/sethb/dotfiles/neovim/.config/nvim/filetype.lua;
+    #".config/nvim/lazy-lock.json".source = config.lib.file.mkOutOfStoreSymlink /home/sethb/dotfiles/neovim/.config/nvim/lazy-lock.json;
+    #".config/nvim/lua/seth".source = config.lib.file.mkOutOfStoreSymlink /home/sethb/dotfiles/neovim/.config/nvim/lua/seth;
 
     # # You can also set the file content immediately.
     # ".gradle/gradle.properties".text = ''
