@@ -57,12 +57,23 @@ in {
     enable = true;
 
     profiles = {
-      sethb = {};
+      sethb = {
+        search = {
+            force = true;
+            default = "ddg";
+            privateDefault = "ddg";
+        };
+      };
     };
 
     policies = {
       DisablePocket = true;
       DisableTelemetry = true;
+      DisableFirefoxStudies         = true;
+      DisableFirefoxAccounts        = true;
+      DisableFirefoxScreenshots     = true;
+      DisableSetDesktopBackground   = true;
+
     };
   };
 
