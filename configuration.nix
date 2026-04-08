@@ -15,10 +15,6 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # NOTE: Disable loading this driver and fall back to snd_hda_intel.
-  # Otherwise, there is a race condition between the two drivers.
-  boot.blacklistedKernelModules = ["snd_soc_avs"];
-
   # Add splash screen for boot
   boot.plymouth.enable = true;
 
@@ -92,6 +88,16 @@
 
     # Enable thermald
     thermald.enable = true;
+
+    # Enable smartd
+    smartd = {
+      enable = true;
+      devices = [
+        {
+          device = "/dev/disk/by-id/nvme-KXG60ZNV512G_NVMe_TOSHIBA_512GB_Y8MA23CCK04N";
+        }
+      ];
+    };
 
     hardware.bolt.enable = true;
 
@@ -183,6 +189,9 @@
     # Sound utilities
     pavucontrol
     qpwgraph
+    alsa-firmware
+    alsa-utils
+    sof-firmware
 
     # Graphics stuff
     mesa-demos
@@ -205,7 +214,9 @@
     # Media/extra things
     zoom-us
     steam
+    nyancat
     spotify
+    jellyfin-desktop
 
     # Install extra KDE apps
     kdePackages.plasma-thunderbolt
@@ -214,12 +225,14 @@
     kdePackages.sddm-kcm
 
     hardinfo2
+    lm_sensors
     wayland-utils
     wl-clipboard
     powertop
     usbutils
     btop
     stow
+    cpu-x
   ];
 
   programs.neovim = {
@@ -227,6 +240,12 @@
     viAlias = true;
     vimAlias = true;
     defaultEditor = true;
+  };
+
+  programs.steam = {
+    enable = true;
+    gamescopeSession.enable = true;
+    remotePlay.openFirewall = true;
   };
 
   # Enable firefox
@@ -241,6 +260,8 @@
   # Fonts - add Jetbrains Mono
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
+    noto-fonts
+    noto-fonts-cjk-sans
   ];
 
   fonts.fontconfig.defaultFonts = {
@@ -272,32 +293,18 @@
   powerManagement.powertop.enable = true;
 
   # Enable automatic garbage collection
-  nix.gc.automatic = true;
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than +5";
+  };
 
   # Enable flakes
   nix.settings.experimental-features = "nix-command flakes";
 
   # Enable stylix
   stylix.enable = true;
-  stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
-  #stylix.base16Scheme = {
-  #  base00 = "#1e1c31"; # background
-  #  base01 = "#565575"; # alternate background
-  #  base02 = "#cbe3e7";
-  #  base03 = "#100e23"; # unfocused window border
-  #  base04 = "#cbe3e7";
-  #  base05 = "#cbe3e7"; # text
-  #  base06 = "#cbe3e7";
-  #  base07 = "#cbe3e7";
-  #  base08 = "#ff5458"; # urgent window border
-  #  base09 = "#62d196";
-  #  base0A = "#ffb378"; # warning
-  #  base0B = "#65b2ff";
-  #  base0C = "#906cff";
-  #  base0D = "#63f2f1"; # focused window border
-  #  base0E = "#c991e1";
-  #  base0F = "#ffe9aa";
-  #};
+  stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/da-one-ocean.yaml";
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
