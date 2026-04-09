@@ -42,5 +42,22 @@
         }
       ];
     };
+
+    nixosConfigurations.lan-pc = nixpkgs.lib.nixosSystem {
+      specialArgs = {inherit inputs;};
+      modules = [
+        stylix.nixosModules.stylix
+        ./lan-config.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users.sethb = import ./home.nix;
+            #backupFileExtension = "backup";
+          };
+        }
+      ];
+    };
   };
 }
