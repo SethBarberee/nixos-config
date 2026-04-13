@@ -9,6 +9,9 @@
   imports = [
     # Include the results of the hardware scan.
     ./lan-hardware-configuration.nix
+    ./bluetooth.nix
+    ./firefox.nix
+    ./tailscale.nix
   ];
 
   # Bootloader.
@@ -146,21 +149,6 @@
     VISUAL = "nvim";
   };
 
-  # Enable blutooth
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
-    settings = {
-      General = {
-        Experimental = true;
-        # FastConnectable = true;
-      };
-      Policy = {
-        AutoEnable = true;
-      };
-    };
-  };
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -185,16 +173,6 @@
     # Nix dev/lsp
     nixd
     alejandra
-
-    # python dev
-    (python3.withPackages (python-pkgs:
-      with python-pkgs; [
-        pandas
-        requests
-        python-lsp-server
-        python-lsp-jsonrpc
-        isort
-      ]))
 
     # Media/extra things
     zoom-us
@@ -235,43 +213,6 @@
     remotePlay.openFirewall = true;
   };
 
-  # Enable firefox
-  programs.firefox = {
-    enable = true;
-    preferences = {
-      "browser.startup.homepage" = "https://sethbarberee.github.io/Galaxy";
-      "widget.use-xdg-desktop-portal.file-picker" = 1;
-    };
-  };
-
-  # Fonts - add Jetbrains Mono
-  fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-    noto-fonts
-    noto-fonts-cjk-sans
-  ];
-
-  fonts.fontconfig.defaultFonts = {
-    monospace = [
-      "JetBrainsMono Nerd Font"
-    ];
-  };
-
-  # Enable tailscale and firewall
-  services.tailscale.enable = true;
-  services.tailscale.useRoutingFeatures = "client";
-  networking.nftables.enable = true;
-  networking.firewall = {
-    enable = true;
-    trustedInterfaces = ["tailscale0"];
-    allowedUDPPorts = [config.services.tailscale.port];
-    checkReversePath = "loose";
-  };
-
-  systemd.services.tailscaled.serviceConfig.Environment = [
-    "TS_DEBUG_FIREWALL=nftables"
-  ];
-
   systemd.network.wait-online.enable = false;
   boot.initrd.systemd.network.wait-online.enable = false;
 
@@ -283,7 +224,7 @@
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    options = "--delete-older-than +5";
+    options = "--delete-older-than 14d";
   };
 
   # Enable flakes

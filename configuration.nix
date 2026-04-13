@@ -9,6 +9,9 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./bluetooth.nix
+    ./firefox.nix
+    ./tailscale.nix
   ];
 
   # Bootloader.
@@ -161,21 +164,6 @@
     VISUAL = "nvim";
   };
 
-  # Enable blutooth
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
-    settings = {
-      General = {
-        Experimental = true;
-        # FastConnectable = true;
-      };
-      Policy = {
-        AutoEnable = true;
-      };
-    };
-  };
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -238,63 +226,6 @@
     remotePlay.openFirewall = true;
   };
 
-  # Enable firefox
-  programs.firefox = {
-    enable = true;
-    preferences = {
-      "browser.startup.homepage" = "https://sethbarberee.github.io/Galaxy";
-      "widget.use-xdg-desktop-portal.file-picker" = 1;
-    };
-
-    policies = {
-      DisablePocket = true;
-      DisableTelemetry = true;
-      EnableTrackingProtection = {
-        Value = true;
-        Locked = true;
-        Cryptomining = true;
-        Fingerprinting = true;
-      };
-      DisableFirefoxStudies = true;
-      DisableFirefoxAccounts = true;
-      DisableFirefoxScreenshots = true;
-      DisableSetDesktopBackground = true;
-
-      ExtensionSettings = let
-        moz = short: "https://addons.mozilla.org/firefox/downloads/latest/${short}/latest.xpi";
-      in {
-        "*".installation_mode = "blocked"; # blocks all addons except the ones specified below
-        # uBlock Origin:
-        "uBlock0@raymondhill.net" = {
-          install_url       = moz "ublock-origin";
-          installation_mode = "force_installed";
-          updates_disabled = true;
-        };
-        # Dark Reader
-        "addon@darkreader.org" = {
-          install_url       = moz "darkreader";
-          installation_mode = "force_installed";
-          updates_disabled = true;
-        };
-      };
-    };
-  };
-
-  # Enable tailscale and firewall
-  services.tailscale.enable = true;
-  services.tailscale.useRoutingFeatures = "client";
-  networking.nftables.enable = true;
-  networking.firewall = {
-    enable = true;
-    trustedInterfaces = ["tailscale0"];
-    allowedUDPPorts = [config.services.tailscale.port];
-    checkReversePath = "loose";
-  };
-
-  systemd.services.tailscaled.serviceConfig.Environment = [
-    "TS_DEBUG_FIREWALL=nftables"
-  ];
-
   systemd.network.wait-online.enable = false;
   boot.initrd.systemd.network.wait-online.enable = false;
 
@@ -306,7 +237,7 @@
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    options = "--delete-older-than +5";
+    options = "--delete-older-than 14d";
   };
 
   # Enable flakes
