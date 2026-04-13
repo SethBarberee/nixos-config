@@ -201,16 +201,6 @@
     nixd
     alejandra
 
-    # python dev
-    (python3.withPackages (python-pkgs:
-      with python-pkgs; [
-        pandas
-        requests
-        python-lsp-server
-        python-lsp-jsonrpc
-        isort
-      ]))
-
     # Media/extra things
     zoom-us
     steam
@@ -288,19 +278,6 @@
         };
       };
     };
-  };
-
-  # Fonts - add Jetbrains Mono
-  fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-    noto-fonts
-    noto-fonts-cjk-sans
-  ];
-
-  fonts.fontconfig.defaultFonts = {
-    monospace = [
-      "JetBrainsMono Nerd Font"
-    ];
   };
 
   # Enable tailscale and firewall
