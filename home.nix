@@ -51,6 +51,9 @@ in {
     viAlias = true;
     vimAlias = true;
     defaultEditor = true;
+    plugins = [
+        pkgs.vimPlugins.nvim-treesitter.withAllGrammars
+    ];
   };
 
   programs.firefox = {
@@ -64,16 +67,6 @@ in {
             privateDefault = "ddg";
         };
       };
-    };
-
-    policies = {
-      DisablePocket = true;
-      DisableTelemetry = true;
-      DisableFirefoxStudies         = true;
-      DisableFirefoxAccounts        = true;
-      DisableFirefoxScreenshots     = true;
-      DisableSetDesktopBackground   = true;
-
     };
   };
 
