@@ -42,22 +42,8 @@
   # Set up networking
   networking = {
     hostName = "nixos";
-    wireless = {
-      iwd = {
-        enable = true;
-        settings = {
-          Network = {
-            EnableIPv6 = true;
-          };
-          Settings = {
-            AutoConnect = true;
-          };
-        };
-      };
-    };
     networkmanager = {
       enable = true;
-      wifi.backend = "iwd";
     };
   };
 
@@ -176,6 +162,9 @@
     viAlias = true;
     vimAlias = true;
     defaultEditor = true;
+    withRuby = false;
+    withNodeJs = false;
+    withPython3 = true;
   };
 
   programs.steam = {

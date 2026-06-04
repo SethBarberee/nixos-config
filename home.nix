@@ -51,6 +51,10 @@ in {
     viAlias = true;
     vimAlias = true;
     defaultEditor = true;
+    withRuby = false;
+    withPerl = false;
+    withNodeJs = false;
+    withPython3 = true;
     plugins = [
         pkgs.vimPlugins.nvim-treesitter.withAllGrammars
     ];
@@ -58,6 +62,7 @@ in {
 
   programs.firefox = {
     enable = true;
+    configPath = "${config.xdg.configHome}/mozilla/firefox";
 
     profiles = {
       sethb = {
