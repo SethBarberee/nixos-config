@@ -27,6 +27,7 @@
   fileSystems."/home" =
     { device = "/dev/disk/by-uuid/c73674c6-295c-49e8-a4c6-a79472ae0ab0";
       fsType = "btrfs";
+      options = [ "compress=zstd" ];
     };
 
   swapDevices =
