@@ -8,12 +8,12 @@
 }: {
   imports = [
     # Include the results of the hardware scan.
-    ./lan-hardware-configuration.nix
-    ./bluetooth.nix
-    ./firefox.nix
-    ./tailscale.nix
     ./default-packages.nix
-    ./stylix.nix
+    ./features/bluetooth.nix
+    ./features/firefox.nix
+    ./features/tailscale.nix
+    ./features/stylix.nix
+    ./lan-hardware-configuration.nix
   ];
 
   # Bootloader.
@@ -22,6 +22,9 @@
 
   # Add splash screen for boot
   boot.plymouth.enable = true;
+
+  hardware.amdgpu.initrd.enable = true; # load amdgpu during Stage 1
+  hardware.amdgpu.opencl.enable = true; # load amdgpu during Stage 1
 
   # Use latest kernel
   # boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -65,7 +68,7 @@
   };
 
   # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
+  services.displayManager.plasma-login-manager.enable = true;
   services.desktopManager.plasma6.enable = true;
 
   services.hardware.openrgb.enable = true;

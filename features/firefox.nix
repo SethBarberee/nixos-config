@@ -1,7 +1,4 @@
-{
-  config,
-  ...
-}: {
+{config, ...}: {
   # Enable firefox
   programs.firefox = {
     enable = true;
@@ -30,13 +27,13 @@
         "*".installation_mode = "blocked"; # blocks all addons except the ones specified below
         # uBlock Origin:
         "uBlock0@raymondhill.net" = {
-          install_url       = moz "ublock-origin";
+          install_url = moz "ublock-origin";
           installation_mode = "force_installed";
           updates_disabled = true;
         };
         # Dark Reader
         "addon@darkreader.org" = {
-          install_url       = moz "darkreader";
+          install_url = moz "darkreader";
           installation_mode = "force_installed";
           updates_disabled = true;
         };

@@ -1,9 +1,5 @@
-{
-  config,
-  ...
-}: {
- 
- # Enable tailscale and firewall
+{config, ...}: {
+  # Enable tailscale and firewall
   services.tailscale.enable = true;
   services.tailscale.useRoutingFeatures = "client";
   networking.nftables.enable = true;

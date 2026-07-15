@@ -8,12 +8,12 @@
 }: {
   imports = [
     # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-    ./bluetooth.nix
-    ./firefox.nix
-    ./tailscale.nix
     ./default-packages.nix
-    ./stylix.nix
+    ./features/bluetooth.nix
+    ./features/firefox.nix
+    ./features/stylix.nix
+    ./features/tailscale.nix
+    ./hardware-configuration.nix
   ];
 
   # Bootloader.

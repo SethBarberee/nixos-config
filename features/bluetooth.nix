@@ -1,7 +1,4 @@
-{
-  config,
-  ...
-}: {
+{config, ...}: {
   # Enable blutooth
   hardware.bluetooth = {
     enable = true;
