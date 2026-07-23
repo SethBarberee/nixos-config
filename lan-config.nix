@@ -9,10 +9,17 @@
   imports = [
     # Include the results of the hardware scan.
     ./default-packages.nix
+    ./features/audio.nix
     ./features/bluetooth.nix
     ./features/firefox.nix
+    ./features/kernel.nix
+    ./features/locale.nix
+    ./features/plasma.nix
+    ./features/steam.nix
     ./features/tailscale.nix
+    ./features/sethb.nix
     ./features/stylix.nix
+    ./features/nh.nix
     ./lan-hardware-configuration.nix
   ];
 
@@ -26,50 +33,11 @@
   hardware.amdgpu.initrd.enable = true; # load amdgpu during Stage 1
   hardware.amdgpu.opencl.enable = true; # load amdgpu during Stage 1
 
-  # Use latest kernel
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  # Use the zen kernel
-  boot.kernelPackages = pkgs.linuxPackages_zen;
-
-  # Area to configure module params
-  # boot.extraModprobeConfig = ''
-
-  # '';
-
-  boot.kernelParams = [
-    "quiet"
-    "splash"
-    "usbcore.autosuspend=120" # wait two minutes (120 seconds) before suspend
-  ];
-
   # Set up networking
   networking = {
     hostName = "lan-nix";
     networkmanager.enable = true;
   };
-
-  # Set your time zone.
-  time.timeZone = "America/Los_Angeles";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
-
-  # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.plasma-login-manager.enable = true;
-  services.desktopManager.plasma6.enable = true;
 
   services.hardware.openrgb.enable = true;
   hardware.i2c.enable = true;
@@ -82,31 +50,19 @@
     fstrim.enable = true;
 
     # Enable smartd
-    #smartd = {
-    #  enable = true;
-    #  devices = [
-    #    {
-    #      device = "/dev/disk/by-id/nvme-KXG60ZNV512G_NVMe_TOSHIBA_512GB_Y8MA23CCK04N";
-    #    }
-    #  ];
-    #};
-
-    #hardware.bolt.enable = true;
+    smartd = {
+      enable = true;
+      devices = [
+        {
+          device = "/dev/disk/by-uuid/7e796130-d691-48b7-acc4-adbb3dff940e"; 
+        }
+      ];
+    };
 
     # Configure keymap in X11
     xserver.xkb = {
       layout = "us";
       variant = "";
-    };
-
-    # Enable sound via pipewire
-    pulseaudio.enable = false;
-    pipewire = {
-      enable = true;
-      audio.enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
     };
   };
 
@@ -157,7 +113,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    openrgb
+    nvme-cli 
   ];
 
   programs.neovim = {
@@ -167,25 +123,8 @@
     defaultEditor = true;
   };
 
-  programs.steam = {
-    enable = true;
-    gamescopeSession.enable = true;
-    remotePlay.openFirewall = true;
-  };
-
   systemd.network.wait-online.enable = false;
   boot.initrd.systemd.network.wait-online.enable = false;
-
-  # Enable NixOs Power Management
-  #powerManagement.enable = true;
-  #powerManagement.powertop.enable = true;
-
-  # Enable automatic garbage collection
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 14d";
-  };
 
   # Enable flakes
   nix.settings.experimental-features = "nix-command flakes";

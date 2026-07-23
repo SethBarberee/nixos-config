@@ -9,10 +9,17 @@
   imports = [
     # Include the results of the hardware scan.
     ./default-packages.nix
+    ./features/audio.nix
     ./features/bluetooth.nix
     ./features/firefox.nix
-    ./features/stylix.nix
+    ./features/kernel.nix
+    ./features/locale.nix
+    ./features/plasma.nix
+    ./features/steam.nix
     ./features/tailscale.nix
+    ./features/sethb.nix
+    ./features/stylix.nix
+    ./features/nh.nix
     ./hardware-configuration.nix
   ];
 
@@ -23,23 +30,6 @@
   # Add splash screen for boot
   boot.plymouth.enable = true;
 
-  # Use latest kernel
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  # Use the zen kernel
-  boot.kernelPackages = pkgs.linuxPackages_zen;
-
-  # Area to configure module params
-  # boot.extraModprobeConfig = ''
-
-  # '';
-
-  boot.kernelParams = [
-    "quiet"
-    "splash"
-    "usbcore.autosuspend=120" # wait two minutes (120 seconds) before suspend
-  ];
-
   # Set up networking
   networking = {
     hostName = "nixos";
@@ -47,28 +37,6 @@
       enable = true;
     };
   };
-
-  # Set your time zone.
-  time.timeZone = "America/Los_Angeles";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
-
-  # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
 
   services = {
     printing.enable = true;
@@ -97,16 +65,6 @@
       layout = "us";
       variant = "";
     };
-
-    # Enable sound via pipewire
-    pulseaudio.enable = false;
-    pipewire = {
-      enable = true;
-      audio.enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-    };
   };
 
   security.rtkit.enable = true;
@@ -117,16 +75,6 @@
     #extraPortals = with pkgs; [
     #	xdg-desktop-portal-kde
     #];
-  };
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.sethb = {
-    isNormalUser = true;
-    description = "Seth Barberee";
-    extraGroups = ["networkmanager" "wheel"];
-    packages = with pkgs; [
-      vlc
-    ];
   };
 
   # Allow unfree packages
@@ -168,25 +116,12 @@
     withPython3 = true;
   };
 
-  programs.steam = {
-    enable = true;
-    gamescopeSession.enable = true;
-    remotePlay.openFirewall = true;
-  };
-
   systemd.network.wait-online.enable = false;
   boot.initrd.systemd.network.wait-online.enable = false;
 
   # Enable NixOs Power Management
   powerManagement.enable = true;
   powerManagement.powertop.enable = true;
-
-  # Enable automatic garbage collection
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 14d";
-  };
 
   # Enable flakes
   nix.settings.experimental-features = "nix-command flakes";
