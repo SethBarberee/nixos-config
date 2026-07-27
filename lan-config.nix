@@ -20,6 +20,7 @@
     ./features/sethb.nix
     ./features/stylix.nix
     ./features/nh.nix
+    ./features/qmk.nix
     ./lan-hardware-configuration.nix
   ];
 

@@ -3,9 +3,7 @@
   pkgs,
   ...
 }: {
-  environment.systemPackages = with pkgs; [
-    neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    #tree-sitter
+  environment.systemPackages = with pkgs; [ neovim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default. tree-sitter
     fastfetch
     wget
     kitty
@@ -34,6 +32,8 @@
     jellyfin-desktop
     webcord
     osu-lazer-bin
+    mgba
+    melonds
 
     # Install extra KDE apps
     kdePackages.plasma-thunderbolt
@@ -49,5 +49,12 @@
     btop
     stow
     cpu-x
+
+    google-chrome
+
+    # keyboard dev
+    qmk
+    via
+    dos2unix
   ];
 }
