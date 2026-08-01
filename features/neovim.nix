@@ -227,7 +227,7 @@
            }
 
 
-           vim.lsp.enable({'nixd'})
+           vim.lsp.enable({'nixd', 'clangd'})
            vim.lsp.inlay_hint.enable()
 
            -- Global Keymaps for LSP functionality

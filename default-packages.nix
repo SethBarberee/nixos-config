@@ -56,5 +56,7 @@
     qmk
     via
     dos2unix
+
+    compiledb
   ];
 }
