@@ -27,6 +27,8 @@
     # Media/extra things
     zoom-us
     steam
+    lutris
+    openrct2
     nyancat
     spotify
     jellyfin-desktop
@@ -58,5 +60,6 @@
     dos2unix
 
     compiledb
+    xsensors
   ];
 }
