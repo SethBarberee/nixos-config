@@ -94,6 +94,7 @@
       vim.keymap.set('n', '<leader>lI', "<cmd>LspCapabilities<cr>", { desc = 'lsp-capabilities' })
       vim.keymap.set('n', '<leader><c-k>', '<cmd>lua vim.lsp.buf.signature_help()<cr>', { desc = 'lsp-sighelp' })
       vim.keymap.set('n', '<leader>lR', vim.lsp.buf.rename, { desc = 'lsp-rename' })
+      vim.keymap.set('n', '<leader>lr', vim.lsp.buf.references, { desc = 'lsp-references' })
       vim.keymap.set('n', '<leader>l0', vim.lsp.buf.document_symbol, { desc = 'lsp-docsymbol' })
       vim.keymap.set('n', '<leader>lW', vim.lsp.buf.workspace_symbol, { desc = 'lsp-workspacesymbol' })
       vim.keymap.set('n', '<leader>ll', vim.lsp.codelens.run, { desc = 'lsp-codelens-run' })
