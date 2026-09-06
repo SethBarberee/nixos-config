@@ -11,6 +11,10 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -18,6 +22,7 @@
     nixpkgs,
     stylix,
     home-manager,
+    nur,
   } @ inputs: let
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
@@ -26,6 +31,7 @@
     nixosConfigurations.default = nixpkgs.lib.nixosSystem {
       specialArgs = {inherit inputs;};
       modules = [
+        nur.modules.nixos.default
         stylix.nixosModules.stylix
         ./configuration.nix
         home-manager.nixosModules.home-manager
@@ -43,6 +49,7 @@
     nixosConfigurations.lan-pc = nixpkgs.lib.nixosSystem {
       specialArgs = {inherit inputs;};
       modules = [
+        nur.modules.nixos.default
         stylix.nixosModules.stylix
         ./lan-config.nix
         home-manager.nixosModules.home-manager

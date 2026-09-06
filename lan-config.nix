@@ -11,7 +11,6 @@
     ./default-packages.nix
     ./features/audio.nix
     ./features/bluetooth.nix
-    ./features/firefox.nix
     ./features/kernel.nix
     ./features/locale.nix
     ./features/plasma.nix

@@ -8,6 +8,7 @@ in {
   imports = [
     ./features/mangohud.nix
     ./features/neovim.nix
+    ./features/firefox.nix
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -45,20 +46,6 @@ in {
     # '')
   ];
 
-  programs.firefox = {
-    enable = true;
-    configPath = "${config.xdg.configHome}/mozilla/firefox";
-
-    profiles = {
-      sethb = {
-        search = {
-          force = true;
-          default = "ddg";
-          privateDefault = "ddg";
-        };
-      };
-    };
-  };
 
   programs.mpv = {
     enable = true;

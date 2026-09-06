@@ -1,13 +1,19 @@
-{config, ...}: {
-  # Enable firefox
+
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
+in {
+
+  # Home-manager firefox config
+
   programs.firefox = {
     enable = true;
-    preferences = {
-      "browser.startup.homepage" = "https://sethbarberee.github.io/Galaxy";
-      "widget.use-xdg-desktop-portal.file-picker" = 1;
-    };
+    configPath = "${config.xdg.configHome}/mozilla/firefox";
 
-    policies = {
+    policies =  {
       DisablePocket = true;
       DisableTelemetry = true;
       EnableTrackingProtection = {
@@ -20,22 +26,29 @@
       DisableFirefoxAccounts = true;
       DisableFirefoxScreenshots = true;
       DisableSetDesktopBackground = true;
+    };
 
-      ExtensionSettings = let
-        moz = short: "https://addons.mozilla.org/firefox/downloads/latest/${short}/latest.xpi";
-      in {
-        "*".installation_mode = "blocked"; # blocks all addons except the ones specified below
-        # uBlock Origin:
-        "uBlock0@raymondhill.net" = {
-          install_url = moz "ublock-origin";
-          installation_mode = "force_installed";
-          updates_disabled = true;
-        };
-        # Dark Reader
-        "addon@darkreader.org" = {
-          install_url = moz "darkreader";
-          installation_mode = "force_installed";
-          updates_disabled = true;
+    profiles = {
+      sethb = {
+       id = 0;
+       name = "sethb";
+       isDefault = true;
+       settings = {
+           "browser.startup.homepage" = "https://sethbarberee.github.io/Galaxy";
+           "widget.use-xdg-desktop-portal.file-picker" = 1;
+       };
+
+       extensions = {
+           packages = with pkgs.nur.repos.rycee.firefox-addons; [
+               bitwarden
+               ublock-origin
+               darkreader
+           ];
+       };
+       search = {
+          force = true;
+          default = "ddg";
+          privateDefault = "ddg";
         };
       };
     };
