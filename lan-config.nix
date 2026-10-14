@@ -25,6 +25,7 @@
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.graceful = true; # NOTE: only have this for Nixos 26.05
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Add splash screen for boot
@@ -88,6 +89,10 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  nixpkgs.config.permittedInsecurePackages = [
+      "electron-41.10.7"
+  ];
 
   # Add VA-API driver
   hardware.graphics = {

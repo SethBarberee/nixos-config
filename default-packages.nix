@@ -51,6 +51,8 @@
     btop
     stow
     cpu-x
+    nix-index
+    pciutils
 
     google-chrome
 
