@@ -1,5 +1,8 @@
-{ pkgs, ... } : 
+{ pkgs, ... }:
 {
-    hardware.keyboard.qmk.enable = true;
-    services.udev.packages = [ pkgs.via  pkgs.qmk-udev-rules];
+  hardware.keyboard.qmk.enable = true;
+  services.udev.packages = [
+    pkgs.via
+    pkgs.qmk-udev-rules
+  ];
 }

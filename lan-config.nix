@@ -5,7 +5,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     # Include the results of the hardware scan.
     ./default-packages.nix
@@ -55,7 +56,7 @@
       enable = true;
       devices = [
         {
-          device = "/dev/disk/by-uuid/7e796130-d691-48b7-acc4-adbb3dff940e"; 
+          device = "/dev/disk/by-uuid/7e796130-d691-48b7-acc4-adbb3dff940e";
         }
       ];
     };
@@ -81,7 +82,10 @@
   users.users.sethb = {
     isNormalUser = true;
     description = "Seth Barberee";
-    extraGroups = ["networkmanager" "wheel"];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     packages = with pkgs; [
       vlc
     ];
@@ -91,7 +95,7 @@
   nixpkgs.config.allowUnfree = true;
 
   nixpkgs.config.permittedInsecurePackages = [
-      "electron-41.10.7"
+    "electron-41.10.7"
   ];
 
   # Add VA-API driver
@@ -118,7 +122,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    nvme-cli 
+    nvme-cli
   ];
 
   programs.neovim = {

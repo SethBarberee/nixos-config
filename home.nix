@@ -3,8 +3,10 @@
   pkgs,
   lib,
   ...
-}: let
-in {
+}:
+let
+in
+{
   imports = [
     ./features/mangohud.nix
     ./features/neovim.nix
@@ -46,10 +48,9 @@ in {
     # '')
   ];
 
-
   programs.mpv = {
     enable = true;
-    defaultProfiles = ["gpu-hq"];
+    defaultProfiles = [ "gpu-hq" ];
     config = {
       hwdec = "auto";
       ytdl-format = "bestvideo[height<=?1080]+bestaudio/best";
@@ -95,7 +96,7 @@ in {
   };
 
   # Stylix stuff
-  stylix.targets.firefox.profileNames = ["sethb"];
+  stylix.targets.firefox.profileNames = [ "sethb" ];
   stylix.targets.neovim.enable = false; # disable stylix for neovim
 
   # NOTE: need this to fix overwriting the GTK2 config

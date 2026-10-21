@@ -1,5 +1,5 @@
 {
-  description = "nixos config";
+  description = "nixos config — den aspect-oriented";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
@@ -15,53 +15,64 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-  };
-
-  outputs = {
-    self,
-    nixpkgs,
-    stylix,
-    home-manager,
-    nur,
-  } @ inputs: let
-    system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
-  in {
-
-    nixosConfigurations.default = nixpkgs.lib.nixosSystem {
-      specialArgs = {inherit inputs;};
-      modules = [
-        nur.modules.nixos.default
-        stylix.nixosModules.stylix
-        ./configuration.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.sethb = import ./home.nix;
-            #backupFileExtension = "backup";
-          };
-        }
-      ];
+    den = {
+      url = "github:denful/den";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nixosConfigurations.lan-pc = nixpkgs.lib.nixosSystem {
-      specialArgs = {inherit inputs;};
-      modules = [
-        nur.modules.nixos.default
-        stylix.nixosModules.stylix
-        ./lan-config.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.sethb = import ./home.nix;
-            #backupFileExtension = "backup";
-          };
-        }
-      ];
+    import-tree = {
+      url = "github:denful/import-tree";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
+
+  outputs =
+    inputs:
+    let
+      den =
+        (inputs.nixpkgs.lib.evalModules {
+          modules = [
+            (inputs.import-tree ./modules)
+          ];
+          specialArgs = { inherit inputs; };
+        }).config;
+    in
+    {
+      # Inherit all flake-compatible outputs from den
+      inherit (den.flake) nixosConfigurations darwinConfigurations;
+
+      # Each host re-wraps with stylix, NUR, and home-manager
+      nixosConfigurations.default = inputs.nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+          inputs.nur.modules.nixos.default
+          inputs.stylix.nixosModules.stylix
+          inputs.home-manager.nixosModules.home-manager
+          den.hosts."x86_64-linux".default.mainModule
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.sethb = import ./home.nix;
+            };
+          }
+        ];
+      };
+
+      nixosConfigurations.lan-pc = inputs.nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+          inputs.nur.modules.nixos.default
+          inputs.stylix.nixosModules.stylix
+          inputs.home-manager.nixosModules.home-manager
+          den.hosts."x86_64-linux".lan-pc.mainModule
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.sethb = import ./home.nix;
+            };
+          }
+        ];
+      };
+    };
 }
