@@ -81,6 +81,10 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  nixpkgs.config.permittedInsecurePackages = [
+      "electron-41.10.7"
+  ];
+
   # Add VA-API driver
   hardware.graphics = {
     enable = true;
