@@ -20,6 +20,7 @@
     ./features/stylix.nix
     ./features/nh.nix
     ./features/qmk.nix
+    ./features/spicetify.nix
     ./hardware-configuration.nix
   ];
 

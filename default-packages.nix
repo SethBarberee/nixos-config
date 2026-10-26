@@ -30,7 +30,6 @@
     lutris
     openrct2
     nyancat
-    spotify
     jellyfin-desktop
     webcord
     osu-lazer-bin

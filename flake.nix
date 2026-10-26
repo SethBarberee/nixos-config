@@ -15,6 +15,10 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    spicetify-nix = {
+      url = "github:Gerg-L/spicetify-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -23,6 +27,7 @@
     stylix,
     home-manager,
     nur,
+    spicetify-nix,
   } @ inputs: let
     system = "x86_64-linux";
     pkgs = nixpkgs.legacyPackages.${system};
@@ -33,6 +38,7 @@
       modules = [
         nur.modules.nixos.default
         stylix.nixosModules.stylix
+        spicetify-nix.nixosModules.spicetify
         ./configuration.nix
         home-manager.nixosModules.home-manager
         {
@@ -51,6 +57,7 @@
       modules = [
         nur.modules.nixos.default
         stylix.nixosModules.stylix
+        spicetify-nix.nixosModules.spicetify
         ./lan-config.nix
         home-manager.nixosModules.home-manager
         {
