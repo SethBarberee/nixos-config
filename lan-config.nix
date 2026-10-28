@@ -27,6 +27,7 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.graceful = true; # NOTE: only have this for Nixos 26.05
+  boot.loader.systemd-boot.memtest86.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Add splash screen for boot
