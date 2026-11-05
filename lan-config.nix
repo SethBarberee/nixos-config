@@ -121,7 +121,10 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     nvme-cli 
+    piper
   ];
+
+  services.ratbagd.enable = true; # For logitech mouse
 
   programs.neovim = {
     enable = true;
